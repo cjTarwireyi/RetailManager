@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31205.134
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataManager", "DataManagr\DataManager.csproj", "{4A169BA9-55FA-4A67-9506-4F5A6E425783}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "RetailManagerData", "RetailManagerData\RetailManagerData.sqlproj", "{A59C6D06-D7D9-49E6-A62C-0F2589A72EA0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RetailManagerDesktopUI", "RetailManagerDesktopUI\RetailManagerDesktopUI.csproj", "{1728CD63-1EAB-40AF-A2DD-8516FC32621D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RetailManagerDataManager.Library", "RetailManagerDataManager.Library\RetailManagerDataManager.Library.csproj", "{5AAEB8F8-EB08-475A-B74E-88A2F83457B5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +31,10 @@ Global
 		{1728CD63-1EAB-40AF-A2DD-8516FC32621D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1728CD63-1EAB-40AF-A2DD-8516FC32621D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1728CD63-1EAB-40AF-A2DD-8516FC32621D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5AAEB8F8-EB08-475A-B74E-88A2F83457B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AAEB8F8-EB08-475A-B74E-88A2F83457B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5AAEB8F8-EB08-475A-B74E-88A2F83457B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5AAEB8F8-EB08-475A-B74E-88A2F83457B5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
