@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
 using RetailManagerDataManager.Library.DataAccess;
 using RetailManagerDataManager.Library.Models;
-using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 
 namespace DataManagr.Controllers
@@ -10,13 +10,13 @@ namespace DataManagr.Controllers
     public class UserController : ApiController
     {
        
-        public List<UserModel> GetById()
+        public UserModel GetById()
         {
             UserData data = new UserData();
 
             var id = RequestContext.Principal.Identity.GetUserId();
 
-            var collection = data.GetUserById(id);   
+            var collection = data.GetUserById(id).FirstOrDefault();   
 
             return collection;
         }
