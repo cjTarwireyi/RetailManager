@@ -1,19 +1,28 @@
 ﻿using Caliburn.Micro;
+using RetailManagerDesktopUI.EventModels;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RetailManagerDesktopUI.ViewModels
 {
-    public class ShellViewModel: Conductor<object>
-    {
-        LoginViewModel _loginViewModel;
-        public ShellViewModel(LoginViewModel loginViewModel)
+    public class ShellViewModel: Conductor<object>, IHandle<LogOnEvent>
+    {      
+        private IEventAggregator _events;
+        private SalesViewModel _salesVm;
+        private SimpleContainer _container;
+        public ShellViewModel( IEventAggregator events, SalesViewModel salesVm, SimpleContainer container)
         {
-            _loginViewModel = loginViewModel;
-             ActivateItem(_loginViewModel);
+            _events = events;           
+            _salesVm = salesVm;
+            _container = container;
+
+            _events.Subscribe(this);
+
+            ActivateItem(_container.GetInstance<LoginViewModel>());            
+        }
+
+        public void Handle(LogOnEvent message)
+        {
+            ActivateItem(_salesVm);
         }
     }
 }
