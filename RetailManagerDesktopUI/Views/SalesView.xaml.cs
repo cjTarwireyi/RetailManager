@@ -17,7 +17,7 @@ namespace RetailManagerDesktopUI.Views
     /// <summary>
     /// Interaction logic for SalesView.xaml
     /// </summary>
-    public partial class SalesView : Window
+    public partial class SalesView : UserControl
     {
         public SalesView()
         {
