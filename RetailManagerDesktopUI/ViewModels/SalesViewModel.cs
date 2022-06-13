@@ -2,17 +2,18 @@
 using RetailManagerDesktopUI.Library.Api;
 using RetailManagerDesktopUI.Library.Models;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace RetailManagerDesktopUI.ViewModels
 {
-    public class SalesViewModel: Screen
+    public class SalesViewModel : Screen
     {
         IProductEndpoint _productEndpoint;
         public SalesViewModel(IProductEndpoint productEndpoint)
         {
             _productEndpoint = productEndpoint;
-           
+
         }
         protected override async void OnViewLoaded(object view)
         {
@@ -29,56 +30,78 @@ namespace RetailManagerDesktopUI.ViewModels
         public BindingList<ProductModel> Products
         {
             get { return _products; }
-            set 
-            { 
+            set
+            {
                 _products = value;
                 NotifyOfPropertyChange(() => Products);
             }
         }
+        private ProductModel _selectedProduct;
 
-        private BindingList<string> _cart;
-
-        public BindingList<string> Cart
+        public ProductModel SelectedProduct
         {
-            get { return _cart; }
+            get { return _selectedProduct; }
             set
-            { 
+            {
+                _selectedProduct = value;
+                NotifyOfPropertyChange(() => SelectedProduct);
+                NotifyOfPropertyChange(() => CanAddToCart);
+            }
+        }
+
+        private BindingList<CartItemModel> _cart = new BindingList<CartItemModel>();
+
+        public BindingList<CartItemModel> Cart
+        {
+            get
+            {
+
+                return _cart;
+            }
+            set
+            {
                 _cart = value;
                 NotifyOfPropertyChange(() => Cart);
             }
         }
 
-        private int _itemQuantity;       
+        private int _itemQuantity = 1;
 
         public int ItemQuantity
         {
             get { return _itemQuantity; }
-            set 
-            { 
+            set
+            {
                 _itemQuantity = value;
                 NotifyOfPropertyChange(() => ItemQuantity);
+                NotifyOfPropertyChange(() => CanAddToCart);
             }
         }
-        public string SubTotal 
+        public string SubTotal
         {
             get
             {
-                return "R0.00";
-            } 
+                decimal subTotal = 0;
+                foreach (var item in Cart)
+                {
+                    subTotal += (item.Product.RetailPrice * item.QuantityInCart);
+                }
+                return subTotal.ToString("C");
+            }
         }
-        public string Vat 
+        public string Vat
         {
             get
             {
                 return "R0.00";
-            } 
+            }
         }
-        public string Total 
+        public string Total
         {
             get
             {
                 return "R0.00";
-            } 
+            }
         }
         public bool CanAddToCart
         {
@@ -86,19 +109,43 @@ namespace RetailManagerDesktopUI.ViewModels
             {
                 bool output = false;
                 //Make sure something is selected
+                if (ItemQuantity > 0 && SelectedProduct?.QuantityInStock >= ItemQuantity)
+                {
+                    output = true;
+                }
                 return output;
             }
         }
         public void AddToCart()
         {
+            var existingItem = Cart.FirstOrDefault(x => x.Product == SelectedProduct);
+            if (existingItem != null)
+            {
+                existingItem.QuantityInCart += ItemQuantity;
+                Cart.Remove(existingItem);
+                Cart.Add(existingItem);
+            }
+            else
+            {
+                var item = new CartItemModel
+                {
+                    Product = SelectedProduct,
+                    QuantityInCart = ItemQuantity,
+                };
+                Cart.Add(item);
+            }
 
+            SelectedProduct.QuantityInStock -= ItemQuantity;
+            ItemQuantity = 1;
+            NotifyOfPropertyChange(() => SubTotal);
+            // NotifyOfPropertyChange(() => Cart);
         }
         public bool CanRemoveFromCart
         {
             get
             {
                 bool output = false;
-               //Make sure something is selected
+                //Make sure something is selected
                 return output;
             }
         }
@@ -111,7 +158,7 @@ namespace RetailManagerDesktopUI.ViewModels
             get
             {
                 bool output = false;
-               //Make sure there is something in the Cart
+                //Make sure there is something in the Cart
                 return output;
             }
         }
