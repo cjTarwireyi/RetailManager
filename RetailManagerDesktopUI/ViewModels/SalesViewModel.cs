@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using RetailManagerDesktopUI.Library.Api;
+using RetailManagerDesktopUI.Library.Helpers;
 using RetailManagerDesktopUI.Library.Models;
 using System.ComponentModel;
 using System.Linq;
@@ -10,10 +11,12 @@ namespace RetailManagerDesktopUI.ViewModels
     public class SalesViewModel : Screen
     {
         IProductEndpoint _productEndpoint;
-        public SalesViewModel(IProductEndpoint productEndpoint)
+        private readonly IConfigHelper _configHelper;
+
+        public SalesViewModel(IProductEndpoint productEndpoint, IConfigHelper configHelper)
         {
             _productEndpoint = productEndpoint;
-
+            _configHelper = configHelper;
         }
         protected override async void OnViewLoaded(object view)
         {
@@ -81,26 +84,41 @@ namespace RetailManagerDesktopUI.ViewModels
         {
             get
             {
-                decimal subTotal = 0;
-                foreach (var item in Cart)
-                {
-                    subTotal += (item.Product.RetailPrice * item.QuantityInCart);
-                }
-                return subTotal.ToString("C");
+                return CalculateSubTotal().ToString("C");
             }
+        }
+        private decimal CalculateSubTotal()
+        {
+            decimal subTotal = 0;
+            foreach (var item in Cart)
+            {
+                subTotal += (item.Product.RetailPrice * item.QuantityInCart);
+            }
+            return subTotal;
         }
         public string Vat
         {
             get
-            {
-                return "R0.00";
+            {              
+                return CalculateVat().ToString("C");
             }
+        }
+        private decimal CalculateVat()
+        {
+            decimal taxAmount = 0;
+            var taxRate = _configHelper.GetTaxRate();
+            foreach (var item in Cart)
+            {
+                if (item.Product.IsTaxable)
+                    taxAmount += (item.Product.RetailPrice * item.QuantityInCart * (taxRate/100));
+            }
+            return taxAmount;
         }
         public string Total
         {
             get
             {
-                return "R0.00";
+                return (CalculateSubTotal() + CalculateVat()).ToString("C");
             }
         }
         public bool CanAddToCart
@@ -138,6 +156,8 @@ namespace RetailManagerDesktopUI.ViewModels
             SelectedProduct.QuantityInStock -= ItemQuantity;
             ItemQuantity = 1;
             NotifyOfPropertyChange(() => SubTotal);
+            NotifyOfPropertyChange(() => Vat);
+            NotifyOfPropertyChange(() => Total);
             // NotifyOfPropertyChange(() => Cart);
         }
         public bool CanRemoveFromCart
@@ -151,7 +171,9 @@ namespace RetailManagerDesktopUI.ViewModels
         }
         public void RemoveFromCart()
         {
-
+            NotifyOfPropertyChange(() => SubTotal);
+            NotifyOfPropertyChange(() => Vat);
+            NotifyOfPropertyChange(() => Total);
         }
         public bool CanCheckOut
         {
