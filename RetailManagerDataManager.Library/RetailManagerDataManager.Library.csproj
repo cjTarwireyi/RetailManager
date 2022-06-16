@@ -45,12 +45,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataAccess\ProductData.cs" />
+    <Compile Include="ConfigHelper.cs" />
+    <Compile Include="DataLayer\Product\GetProductCollection.cs" />
+    <Compile Include="DataLayer\Product\GetSingleProduct.cs" />
+    <Compile Include="DataLayer\Sale\CreateSaleData.cs" />
     <Compile Include="Models\ProductModel.cs" />
+    <Compile Include="Models\SaleDbModel.cs" />
+    <Compile Include="Models\SaleDetailDbModel.cs" />
+    <Compile Include="Models\SaleDetailModel.cs" />
+    <Compile Include="Models\SaleModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Internal\DataAccess\SqlDataAccess.cs" />
-    <Compile Include="DataAccess\UserData.cs" />
+    <Compile Include="DataLayer\User\GetSingleUser.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

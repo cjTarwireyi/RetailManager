@@ -27,6 +27,7 @@ namespace RetailManagerDesktopUI
         protected override void Configure()
         {
             _container.Instance(_container)
+                .PerRequest<ISaleEndPoint, SaleEndPoint>()
                 .PerRequest<IProductEndpoint, ProductEndpoint>();
 
             _container
