@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNet.Identity;
-using RetailManagerDataManager.Library.DataAccess;
+using RetailManagerDataManager.Library.DataLayer.User;
 using RetailManagerDataManager.Library.Models;
-using System.Linq;
 using System.Web.Http;
 
 namespace DataManagr.Controllers
@@ -12,13 +11,11 @@ namespace DataManagr.Controllers
        
         public UserModel GetById()
         {
-            UserData data = new UserData();
+            GetSingleUser data = new GetSingleUser();
 
             var id = RequestContext.Principal.Identity.GetUserId();
 
-            var collection = data.GetUserById(id).FirstOrDefault();   
-
-            return collection;
+            return data.GetUserById(id);
         }
     }
 }

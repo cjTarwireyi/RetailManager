@@ -11,12 +11,14 @@ namespace RetailManagerDesktopUI.ViewModels
     public class SalesViewModel : Screen
     {
         IProductEndpoint _productEndpoint;
+        ISaleEndPoint _saleEndpoint;
         private readonly IConfigHelper _configHelper;
 
-        public SalesViewModel(IProductEndpoint productEndpoint, IConfigHelper configHelper)
+        public SalesViewModel(IProductEndpoint productEndpoint, IConfigHelper configHelper, ISaleEndPoint saleEndpoint)
         {
             _productEndpoint = productEndpoint;
             _configHelper = configHelper;
+            _saleEndpoint = saleEndpoint;
         }
         protected override async void OnViewLoaded(object view)
         {
@@ -161,7 +163,7 @@ namespace RetailManagerDesktopUI.ViewModels
             NotifyOfPropertyChange(() => SubTotal);
             NotifyOfPropertyChange(() => Vat);
             NotifyOfPropertyChange(() => Total);
-            // NotifyOfPropertyChange(() => Cart);
+            NotifyOfPropertyChange(() => CanCheckOut);
         }
         public bool CanRemoveFromCart
         {
@@ -177,6 +179,7 @@ namespace RetailManagerDesktopUI.ViewModels
             NotifyOfPropertyChange(() => SubTotal);
             NotifyOfPropertyChange(() => Vat);
             NotifyOfPropertyChange(() => Total);
+            NotifyOfPropertyChange(() => CanCheckOut);
         }
         public bool CanCheckOut
         {
@@ -184,12 +187,21 @@ namespace RetailManagerDesktopUI.ViewModels
             {
                 bool output = false;
                 //Make sure there is something in the Cart
-                return output;
+                return Cart.Count > 0;
             }
         }
-        public void Checkout()
+        public async Task Checkout()
         {
-
+            var sale = new SaleModel();
+            foreach(var item in Cart)
+            {
+                sale.SaleDetails.Add(new SaleDetailModel
+                {
+                    ProductId = item.Product.Id,
+                    Quantity = item.QuantityInCart
+                });
+            }
+           await _saleEndpoint.PostSale(sale);
         }
 
     }

@@ -24,11 +24,8 @@ namespace RetailManagerDesktopUI.Library.Api
 
                     return result;
                 }
-                else
-                {
-                    throw new Exception(response.ReasonPhrase);
-                }
 
+                throw new Exception(response.ReasonPhrase);
             }
         }
     }
