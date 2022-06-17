@@ -9,8 +9,8 @@ namespace RetailManagerDesktopUI.ViewModels
 
     public class LoginViewModel : Screen
     {
-        private string _userName="codzatazz@gmail.com";
-        private string _password = "Password_123";
+        private string _userName;
+        private string _password;
         private IAPIHelper _apiHelper;
         private string _errorMessage;
         private IEventAggregator _events;
