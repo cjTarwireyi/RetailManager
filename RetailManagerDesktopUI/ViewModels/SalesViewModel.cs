@@ -1,7 +1,10 @@
-﻿using Caliburn.Micro;
+﻿using AutoMapper;
+using Caliburn.Micro;
 using RetailManagerDesktopUI.Library.Api;
 using RetailManagerDesktopUI.Library.Helpers;
 using RetailManagerDesktopUI.Library.Models;
+using RetailManagerDesktopUI.Model;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,13 +15,16 @@ namespace RetailManagerDesktopUI.ViewModels
     {
         IProductEndpoint _productEndpoint;
         ISaleEndPoint _saleEndpoint;
+        private readonly IMapper _mapper;
         private readonly IConfigHelper _configHelper;
 
-        public SalesViewModel(IProductEndpoint productEndpoint, IConfigHelper configHelper, ISaleEndPoint saleEndpoint)
+        public SalesViewModel(IProductEndpoint productEndpoint, IConfigHelper configHelper, ISaleEndPoint saleEndpoint,
+            IMapper mapper)
         {
             _productEndpoint = productEndpoint;
             _configHelper = configHelper;
             _saleEndpoint = saleEndpoint;
+            _mapper = mapper;
         }
         protected override async void OnViewLoaded(object view)
         {
@@ -28,11 +34,12 @@ namespace RetailManagerDesktopUI.ViewModels
         private async Task LoadProducts()
         {
             var prodList = await _productEndpoint.GetAll();
-            Products = new BindingList<ProductModel>(prodList);
+            var products = _mapper.Map<List<ProductDisplayModel>>(prodList);
+            Products = new BindingList<ProductDisplayModel>(products);
         }
-        private BindingList<ProductModel> _products;
+        private BindingList<ProductDisplayModel> _products;
 
-        public BindingList<ProductModel> Products
+        public BindingList<ProductDisplayModel> Products
         {
             get { return _products; }
             set
@@ -41,9 +48,9 @@ namespace RetailManagerDesktopUI.ViewModels
                 NotifyOfPropertyChange(() => Products);
             }
         }
-        private ProductModel _selectedProduct;
+        private ProductDisplayModel _selectedProduct;
 
-        public ProductModel SelectedProduct
+        public ProductDisplayModel SelectedProduct
         {
             get { return _selectedProduct; }
             set
@@ -53,10 +60,21 @@ namespace RetailManagerDesktopUI.ViewModels
                 NotifyOfPropertyChange(() => CanAddToCart);
             }
         }
+        private CartItemDisplayModel _selectedCartItem;
 
-        private BindingList<CartItemModel> _cart = new BindingList<CartItemModel>();
+        public CartItemDisplayModel SelectedCartItem
+        {
+            get { return _selectedCartItem; }
+            set
+            {
+                _selectedCartItem = value;
+                NotifyOfPropertyChange(() => SelectedCartItem);
+                NotifyOfPropertyChange(() => CanRemoveFromCart);
+            }
+        }
+        private BindingList<CartItemDisplayModel> _cart = new BindingList<CartItemDisplayModel>();
 
-        public BindingList<CartItemModel> Cart
+        public BindingList<CartItemDisplayModel> Cart
         {
             get
             {
@@ -112,11 +130,6 @@ namespace RetailManagerDesktopUI.ViewModels
 
             taxAmount= Cart.Where(x=> x.Product.IsTaxable)
                 .Sum(x => x.Product.RetailPrice * x.QuantityInCart * taxRate);
-            //foreach (var item in Cart)
-            //{
-            //    if (item.Product.IsTaxable)
-            //        taxAmount += (item.Product.RetailPrice * item.QuantityInCart * taxRate);
-            //}
             return taxAmount;
         }
         public string Total
@@ -145,12 +158,10 @@ namespace RetailManagerDesktopUI.ViewModels
             if (existingItem != null)
             {
                 existingItem.QuantityInCart += ItemQuantity;
-                Cart.Remove(existingItem);
-                Cart.Add(existingItem);
             }
             else
             {
-                var item = new CartItemModel
+                var item = new CartItemDisplayModel
                 {
                     Product = SelectedProduct,
                     QuantityInCart = ItemQuantity,
@@ -169,13 +180,21 @@ namespace RetailManagerDesktopUI.ViewModels
         {
             get
             {
-                bool output = false;
-                //Make sure something is selected
-                return output;
+                return SelectedCartItem != null && SelectedCartItem.QuantityInCart > 0;
             }
         }
         public void RemoveFromCart()
         {
+
+            SelectedCartItem.Product.QuantityInStock += 1;
+            if (SelectedCartItem.QuantityInCart > 1)
+            {
+                SelectedCartItem.QuantityInCart -= 1;             
+            }
+            else
+            {               
+                Cart.Remove(SelectedCartItem);
+            }
             NotifyOfPropertyChange(() => SubTotal);
             NotifyOfPropertyChange(() => Vat);
             NotifyOfPropertyChange(() => Total);

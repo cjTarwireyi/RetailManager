@@ -55,13 +55,5 @@ namespace RetailManagerDataManager.Library.DataLayer.Sale
             }
               
         }
-        //public List<ProductModel> GetProducts()
-        //{
-        //    SqlDataAccess sql = new SqlDataAccess();
-
-        //    var result = sql.LoadData<ProductModel, dynamic>("dbo.spProductGetAll", new { }, "DefaultConnection");
-
-        //    return result;
-        //}
     }
 }
