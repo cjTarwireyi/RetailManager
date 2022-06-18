@@ -10,7 +10,7 @@ namespace RetailManagerDesktopUI.Library.Models
         public string EmailAdress { get; set; }
         public DateTime CreatedDate { get; set; }
         public string Token { get; set; }
-        public void LogOffUser()
+        public void ResetUserModel()
         {
             Token = null;
             FirstName  = null;  

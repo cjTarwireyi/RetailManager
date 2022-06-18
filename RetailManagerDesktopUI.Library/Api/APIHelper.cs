@@ -84,5 +84,9 @@ namespace RetailManagerDesktopUI.Library.Api
 
             }
         }
+        public void ClearLoginUserData()
+        {
+            _apiClient.DefaultRequestHeaders.Clear();
+        }
     }
 }
