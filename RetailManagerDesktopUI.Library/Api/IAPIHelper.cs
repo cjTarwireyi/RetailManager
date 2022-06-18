@@ -10,5 +10,6 @@ namespace RetailManagerDesktopUI.Library.Api
         Task<AuthenticatedUser> Authenticate(string username, string password);
         Task<LoginUserModel> GetLoggedInUserInfo(string token);
         HttpClient ApiClient { get; }
+        void ClearLoginUserData();
     }
 }
