@@ -76,6 +76,7 @@
     <Build Include="dbo\Stored Procedures\spSale_Insert.sql" />
     <Build Include="dbo\Stored Procedures\spSaleDetail_Insert.sql" />
     <Build Include="dbo\Stored Procedures\spSale_GetByExpression.sql" />
+    <Build Include="dbo\Stored Procedures\spProduct_Update.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="RetailManagerData.refactorlog" />
