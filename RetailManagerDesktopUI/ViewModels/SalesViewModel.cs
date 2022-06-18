@@ -60,6 +60,16 @@ namespace RetailManagerDesktopUI.ViewModels
                 NotifyOfPropertyChange(() => CanAddToCart);
             }
         }
+
+        private async Task ResetSalesViewModel()
+        {
+            Cart = new BindingList<CartItemDisplayModel>();
+            await LoadProducts();
+            NotifyOfPropertyChange(() => SubTotal);
+            NotifyOfPropertyChange(() => Vat);
+            NotifyOfPropertyChange(() => Total);
+            NotifyOfPropertyChange(() => CanCheckOut);
+        }
         private CartItemDisplayModel _selectedCartItem;
 
         public CartItemDisplayModel SelectedCartItem
@@ -199,13 +209,12 @@ namespace RetailManagerDesktopUI.ViewModels
             NotifyOfPropertyChange(() => Vat);
             NotifyOfPropertyChange(() => Total);
             NotifyOfPropertyChange(() => CanCheckOut);
+            NotifyOfPropertyChange(() => CanAddToCart);
         }
         public bool CanCheckOut
         {
             get
             {
-                bool output = false;
-                //Make sure there is something in the Cart
                 return Cart.Count > 0;
             }
         }
@@ -221,6 +230,7 @@ namespace RetailManagerDesktopUI.ViewModels
                 });
             }
            await _saleEndpoint.PostSale(sale);
+            await ResetSalesViewModel();    
         }
 
     }
