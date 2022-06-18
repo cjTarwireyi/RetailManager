@@ -47,11 +47,13 @@ namespace RetailManagerDataManager.Library.DataLayer.Sale
 
             SqlDataAccess sql = new SqlDataAccess();
             sql.SaveData("dbo.spSale_Insert", sale, "DefaultConnection");
+
             var saleId =sql.LoadData<int, dynamic>("dbo.spSale_GetByExpression", new { sale.CashierId, sale.SaleDate }, "DefaultConnection").FirstOrDefault();
             foreach (var item in saleDetails)
             {
                 item.SaleId = saleId;
                 sql.SaveData("dbo.spSaleDetail_Insert", item, "DefaultConnection");
+                sql.SaveData("dbo.spProduct_Update", new { item.ProductId, PurchasedQuantity = item.Quantity }, "DefaultConnection");
             }
               
         }
