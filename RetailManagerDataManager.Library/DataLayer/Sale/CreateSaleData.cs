@@ -44,18 +44,29 @@ namespace RetailManagerDataManager.Library.DataLayer.Sale
             };
 
             sale.Total = sale.SubTotal + sale.Tax;
-
-            SqlDataAccess sql = new SqlDataAccess();
-            sql.SaveData("dbo.spSale_Insert", sale, "DefaultConnection");
-
-            var saleId =sql.LoadData<int, dynamic>("dbo.spSale_GetByExpression", new { sale.CashierId, sale.SaleDate }, "DefaultConnection").FirstOrDefault();
-            foreach (var item in saleDetails)
+            using (SqlDataAccess sql = new SqlDataAccess())
             {
-                item.SaleId = saleId;
-                sql.SaveData("dbo.spSaleDetail_Insert", item, "DefaultConnection");
-                sql.SaveData("dbo.spProduct_Update", new { item.ProductId, PurchasedQuantity = item.Quantity }, "DefaultConnection");
+                try
+                {
+                    sql.StartTransaction("DefaultConnection");
+
+                    sql.SaveDataInTransaction("dbo.spSale_Insert", sale);
+
+                    var saleId = sql.LoadDataInTransaction<int, dynamic>("dbo.spSale_GetByExpression", new { sale.CashierId, sale.SaleDate }).FirstOrDefault();
+                    foreach (var item in saleDetails)
+                    {
+                        item.SaleId = saleId;
+                        sql.SaveDataInTransaction("dbo.spSaleDetail_Insert", item);
+                        sql.SaveDataInTransaction("dbo.spProduct_Update", new { item.ProductId, PurchasedQuantity = item.Quantity });
+                    }
+                    sql.CommitTransaction();
+                }
+                catch
+                {
+                   sql.RollBackTransaction();
+                    throw;
+                }
             }
-              
         }
     }
 }
