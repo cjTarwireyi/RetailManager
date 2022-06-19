@@ -4,7 +4,7 @@
 AS
 begin
 	set nocount on;
-	update Product 
-	set QuantityInStock =(select QuantityInStock from Product where Id= @ProductId) - @PurchasedQuantity
+	update dbo.Product 
+	set QuantityInStock =(select QuantityInStock from dbo.Product where Id= @ProductId) - @PurchasedQuantity
 	where Id = @ProductId
 end

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace RetailManagerDataManager.Library.DataLayer.Product
 {
-    public class GetSingleProduct
+    public class SingleProductRequest
     {
         public ProductModel GetProductById(int id)
         {
