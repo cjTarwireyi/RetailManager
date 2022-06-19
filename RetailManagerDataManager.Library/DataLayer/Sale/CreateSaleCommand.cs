@@ -8,11 +8,11 @@ using System.Linq;
 
 namespace RetailManagerDataManager.Library.DataLayer.Sale
 {
-    public class CreateSaleData
+    public class CreateSaleCommand
     {
-        public void SaveSale(SaleModel saleInfo, string cashierId)
+        public void Add(SaleModel saleInfo, string cashierId)
         {
-            GetSingleProduct productDbTable = new GetSingleProduct();
+            SingleProductRequest productDbTable = new SingleProductRequest();
             var vat = ConfigHelperExt.GetTaxRate();
             var saleDetails = new List<SaleDetailDbModel>();
             foreach (var item in saleInfo.SaleDetails)
@@ -44,6 +44,7 @@ namespace RetailManagerDataManager.Library.DataLayer.Sale
             };
 
             sale.Total = sale.SubTotal + sale.Tax;
+
             using (SqlDataAccess sql = new SqlDataAccess())
             {
                 try

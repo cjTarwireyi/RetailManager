@@ -10,8 +10,8 @@ namespace DataManagr.Controllers
     {
         public List<ProductModel> Get()
         {
-            GetProductCollection data = new GetProductCollection();
-            return data.GetProducts();
+            ProductsRequest data = new ProductsRequest();
+            return data.GetProductCollection();
         }
     }
 }

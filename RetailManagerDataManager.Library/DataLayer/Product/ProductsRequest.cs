@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace RetailManagerDataManager.Library.DataLayer.Product
 {
-    public class GetProductCollection
+    public class ProductsRequest
     {
-        public List<ProductModel> GetProducts()
+        public List<ProductModel> GetProductCollection()
         {
             SqlDataAccess sql = new SqlDataAccess();
 

@@ -30,7 +30,7 @@ namespace RetailManagerDataManager.Library.Internal.DataAccess
 
             using (IDbConnection connection = new SqlConnection(connectionString))
             {
-                // connection.Execute(storedProcedure, parameters, commandType: CommandType.StoredProcedure);
+                connection.Execute(storedProcedure, parameters, commandType: CommandType.StoredProcedure);
             }
         }
 
@@ -52,7 +52,6 @@ namespace RetailManagerDataManager.Library.Internal.DataAccess
         }
         public void SaveDataInTransaction<T>(string storedProcedure, T parameters)
         {
-
             _connection.Execute(storedProcedure, parameters, commandType: CommandType.StoredProcedure, transaction: _transaction);
         }
 
