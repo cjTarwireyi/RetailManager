@@ -5,7 +5,7 @@ using System.Web.Http;
 
 namespace DataManagr.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Cashier")]
     public class ProductController : ApiController
     {
         public List<ProductModel> Get()

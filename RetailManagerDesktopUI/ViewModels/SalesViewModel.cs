@@ -4,10 +4,13 @@ using RetailManagerDesktopUI.Library.Api;
 using RetailManagerDesktopUI.Library.Helpers;
 using RetailManagerDesktopUI.Library.Models;
 using RetailManagerDesktopUI.Model;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace RetailManagerDesktopUI.ViewModels
 {
@@ -16,20 +19,44 @@ namespace RetailManagerDesktopUI.ViewModels
         IProductEndpoint _productEndpoint;
         ISaleEndPoint _saleEndpoint;
         private readonly IMapper _mapper;
+        private readonly StatusInfoViewModel _status;
+        private readonly IWindowManager _windowManager;
         private readonly IConfigHelper _configHelper;
 
         public SalesViewModel(IProductEndpoint productEndpoint, IConfigHelper configHelper, ISaleEndPoint saleEndpoint,
-            IMapper mapper)
+            IMapper mapper, StatusInfoViewModel status, IWindowManager windowManager)
         {
             _productEndpoint = productEndpoint;
             _configHelper = configHelper;
             _saleEndpoint = saleEndpoint;
             _mapper = mapper;
+            _status = status;
+            _windowManager = windowManager;
         }
         protected override async void OnViewLoaded(object view)
         {
             base.OnViewLoaded(view);
-            await LoadProducts();
+            try
+            {
+                await LoadProducts();
+            }
+            catch(Exception ex)
+            {
+                dynamic settings = new ExpandoObject();
+                settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                settings.ResizeMode = ResizeMode.NoResize;
+                settings.Title = "System Error";
+                var message = "System error contact support!";
+                var messageHeading = "Error Occured";
+                if(ex.Message == "Unauthorized")
+                {
+                    message = "You do Not have permision to interact with the sales form";
+                    messageHeading = "Unauthorized Access";
+                }
+                _status.UpdateMessage(messageHeading, message);
+                _windowManager.ShowDialog(_status, null, settings);
+                TryClose();
+            }
         }
         private async Task LoadProducts()
         {
@@ -129,16 +156,16 @@ namespace RetailManagerDesktopUI.ViewModels
         public string Vat
         {
             get
-            {              
+            {
                 return CalculateVat().ToString("C");
             }
         }
         private decimal CalculateVat()
         {
             decimal taxAmount = 0;
-            var taxRate = _configHelper.GetTaxRate()/100;
+            var taxRate = _configHelper.GetTaxRate() / 100;
 
-            taxAmount= Cart.Where(x=> x.Product.IsTaxable)
+            taxAmount = Cart.Where(x => x.Product.IsTaxable)
                 .Sum(x => x.Product.RetailPrice * x.QuantityInCart * taxRate);
             return taxAmount;
         }
@@ -199,10 +226,10 @@ namespace RetailManagerDesktopUI.ViewModels
             SelectedCartItem.Product.QuantityInStock += 1;
             if (SelectedCartItem.QuantityInCart > 1)
             {
-                SelectedCartItem.QuantityInCart -= 1;             
+                SelectedCartItem.QuantityInCart -= 1;
             }
             else
-            {               
+            {
                 Cart.Remove(SelectedCartItem);
             }
             NotifyOfPropertyChange(() => SubTotal);
@@ -221,7 +248,7 @@ namespace RetailManagerDesktopUI.ViewModels
         public async Task Checkout()
         {
             var sale = new SaleModel();
-            foreach(var item in Cart)
+            foreach (var item in Cart)
             {
                 sale.SaleDetails.Add(new SaleDetailModel
                 {
@@ -229,8 +256,8 @@ namespace RetailManagerDesktopUI.ViewModels
                     Quantity = item.QuantityInCart
                 });
             }
-           await _saleEndpoint.PostSale(sale);
-            await ResetSalesViewModel();    
+            await _saleEndpoint.PostSale(sale);
+            await ResetSalesViewModel();
         }
 
     }
