@@ -10,12 +10,14 @@ namespace DataManagr.Controllers
     [Authorize]
     public class SaleController : ApiController
     {
-       public void Post(SaleModel sale)
+        [Authorize(Roles = "Cashier")]
+        public void Post(SaleModel sale)
         {
             CreateSaleCommand createSale = new CreateSaleCommand();
             var id = RequestContext.Principal.Identity.GetUserId();
             createSale.Add(sale, id);
         }
+        [Authorize(Roles = "Admin,Manager")]
         [Route("GetSalesReport")]
         public List<SaleReportModel> GetSalesReport()
         {

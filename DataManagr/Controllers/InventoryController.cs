@@ -8,12 +8,14 @@ namespace DataManagr.Controllers
     [Authorize]
     public class InventoryController : ApiController
     {
+        [Authorize(Roles = "Admin")]
         public void Post(InventoryModel sale)
         {
             CreateInventoryCommand createInventoryCommand = new CreateInventoryCommand();
             createInventoryCommand.Add(sale);
         }
-        
+
+        [Authorize(Roles = "Admin,Manager")]
         [Route("GetInventoryCollection")]
         public List<InventoryModel> GetInventoryCollection()
         {
