@@ -48,5 +48,9 @@ namespace RetailManagerDesktopUI.ViewModels
             ActivateItem(IoC.Get<LoginViewModel>());
             NotifyOfPropertyChange(() => IsUserLoggedIn);
         }
+        public void UserManagement()
+        {
+            ActivateItem(IoC.Get<UserDisplayViewModel>());
+        }
     }
 }

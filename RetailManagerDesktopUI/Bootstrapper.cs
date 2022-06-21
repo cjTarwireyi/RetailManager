@@ -40,6 +40,7 @@ namespace RetailManagerDesktopUI
             _container.Instance(ConfigureAutoMapper());
             _container.Instance(_container)
                 .PerRequest<ISaleEndPoint, SaleEndPoint>()
+                .PerRequest<IUserEndpoint, UserEndpoint>()
                 .PerRequest<IProductEndpoint, ProductEndpoint>();
 
             _container
