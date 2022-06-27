@@ -9,15 +9,17 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "RetailManagerData", "Retail
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RetailManagerDesktopUI", "RetailManagerDesktopUI\RetailManagerDesktopUI.csproj", "{1728CD63-1EAB-40AF-A2DD-8516FC32621D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RetailManagerDataManager.Library", "RetailManagerDataManager.Library\RetailManagerDataManager.Library.csproj", "{5AAEB8F8-EB08-475A-B74E-88A2F83457B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RetailManagerDataManager.Library", "RetailManagerDataManager.Library\RetailManagerDataManager.Library.csproj", "{5AAEB8F8-EB08-475A-B74E-88A2F83457B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RetailManagerDesktopUI.Library", "RetailManagerDesktopUI.Library\RetailManagerDesktopUI.Library.csproj", "{173743EB-FF21-4ED0-8750-BFE49D06CF74}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RetailManagerDesktopUI.Library", "RetailManagerDesktopUI.Library\RetailManagerDesktopUI.Library.csproj", "{173743EB-FF21-4ED0-8750-BFE49D06CF74}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{1352D996-9671-4C9A-9C34-2E3CC57DCCD1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{284BBB5C-7611-42B5-A8ED-2A1E2D497F5E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WPF", "WPF", "{91668A6E-8A0F-4D4F-9224-3E9F03F5F4FC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataManagerCore", "DataManagerCore\DataManagerCore.csproj", "{9F001D90-5787-4CB7-86D2-B5B1DB0A50D9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,10 @@ Global
 		{173743EB-FF21-4ED0-8750-BFE49D06CF74}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{173743EB-FF21-4ED0-8750-BFE49D06CF74}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{173743EB-FF21-4ED0-8750-BFE49D06CF74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F001D90-5787-4CB7-86D2-B5B1DB0A50D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F001D90-5787-4CB7-86D2-B5B1DB0A50D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F001D90-5787-4CB7-86D2-B5B1DB0A50D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F001D90-5787-4CB7-86D2-B5B1DB0A50D9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -57,6 +63,7 @@ Global
 		{1728CD63-1EAB-40AF-A2DD-8516FC32621D} = {91668A6E-8A0F-4D4F-9224-3E9F03F5F4FC}
 		{5AAEB8F8-EB08-475A-B74E-88A2F83457B5} = {284BBB5C-7611-42B5-A8ED-2A1E2D497F5E}
 		{173743EB-FF21-4ED0-8750-BFE49D06CF74} = {91668A6E-8A0F-4D4F-9224-3E9F03F5F4FC}
+		{9F001D90-5787-4CB7-86D2-B5B1DB0A50D9} = {284BBB5C-7611-42B5-A8ED-2A1E2D497F5E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {45034B1B-16FB-460E-A79F-30C88B7B6CB3}
